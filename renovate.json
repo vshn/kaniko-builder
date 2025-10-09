@@ -21,7 +21,7 @@
       ],
       "matchStrings": [
         "renovate: datasource=(?<datasource>.*?) packageName=(?<packageName>.*?)( versioning=(?<versioning>.*?))?\\s.*?ref: (?<currentValue>.*)$",
-        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*docker .*?:(?<currentValue>.*)@(?<currentDigest>.*)\\s"
+        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*docker .*?:(?<currentValue>.*)@(?<currentDigest>.*?)\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
