@@ -1,0 +1,40 @@
+name: Push stable
+on:
+  push:
+    paths:
+      - .github/workflows/push-stable.yaml
+  pull_request:
+    paths:
+      - .github/workflows/push-stable.yaml
+  workflow_dispatch:
+    inputs:
+      push:
+        type: boolean
+        default: false
+        description: Should the image be pushed
+
+env:
+  IMAGE: ghcr.io/${{ vars.IMAGE_PROJECT || 'vshn' }}/kaniko
+  PUSH: ${{ inputs.push || startsWith(github.ref, 'refs/heads/main') }}
+
+jobs:
+  # the latest of the flavor debug is called debug
+  retag-nightly-to-latest:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef #v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: retag image
+        run: |
+          TAG="nightly-debug@sha256:f77bc4a83d6debf09beae2b1916e6cf2ca24916e13cd6b79244333ec25510de9"
+          
+          docker pull ${{ env.IMAGE }}:$TAG
+          docker tag ${{ env.IMAGE }}:$TAG ${{ env.IMAGE }}:debug
+          if [ "${{ env.PUSH }}" = "true" ]; then
+            docker push ${{ env.IMAGE }}:debug
+          fi
