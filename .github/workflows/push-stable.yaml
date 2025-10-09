@@ -31,6 +31,7 @@ jobs:
 
       - name: retag image
         run: |
+          # renovate: datasource=docker depName=ghcr.io/vshn/kaniko
           TAG="nightly-debug@sha256:f77bc4a83d6debf09beae2b1916e6cf2ca24916e13cd6b79244333ec25510de9"
           
           docker pull ${{ env.IMAGE }}:$TAG
