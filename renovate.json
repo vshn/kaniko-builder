@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "config:recommended"
+  ],
+  "rebaseWhen": "conflicted",
+  "labels": ["renovate"],
+  "vulnerabilityAlerts": {
+    "automerge": false
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "matchPackageNames": ["ghcr.io/vshn/kaniko"],
+      "automerge": true
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.github/.*\\.yaml$/"
+      ],
+      "matchStrings": [
+        "renovate: datasource=(?<datasource>.*?) packageName=(?<packageName>.*?)( versioning=(?<versioning>.*?))?\\s.*?ref: (?<currentValue>.*)",
+        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*TAG=\"(?<currentValue>.*)@(?<currentDigest>[^\"]*?)\""
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ]
+}
