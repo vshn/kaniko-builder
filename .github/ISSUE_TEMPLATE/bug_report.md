@@ -3,8 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: "[chart-name] SUMMARY"
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
 ## Describe the bug
@@ -18,11 +17,13 @@ Add any other context about the problem here.
 ## To Reproduce
 
 Steps to reproduce the behavior:
+
 1. ...
 
 ## Logs
 
 If applicable, add logs to help explain your problem.
+
 ```console
 
 ```
@@ -32,7 +33,8 @@ If applicable, add logs to help explain your problem.
 A clear and concise description of what you expected to happen.
 
 **Environment (please complete the following information):**
- - Chart: latest
- - Helm: v3
- - Kubernetes API: v1.21
- - Distribution (Openshift, Rancher, etc.): Plain K8s
+
+- Chart: latest
+- Helm: v3
+- Kubernetes API: v1.21
+- Distribution (Openshift, Rancher, etc.): Plain K8s

@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "rebaseWhen": "conflicted",
   "minimumReleaseAge": "14 days",
   "labels": ["renovate"],
@@ -21,9 +19,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/.github/.*\\.yaml$/"
-      ],
+      "managerFilePatterns": ["/.github/.*\\.yaml$/"],
       "matchStrings": [
         "renovate: datasource=(?<datasource>.*?) packageName=(?<packageName>.*?)( versioning=(?<versioning>.*?))?\\s.*?ref: (?<currentValue>.*)",
         "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*TAG=\"(?<currentValue>.*)@(?<currentDigest>[^\"]*?)\""
