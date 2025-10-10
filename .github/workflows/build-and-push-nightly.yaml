@@ -42,8 +42,81 @@ jobs:
         with:
           context: .
           file: ./deploy/Dockerfile
-          push: ${{ env.PUSH }}
+          push: false
           tags: ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug
           cache-from: type=gha
           cache-to: type=gha,mode=max
           target: kaniko-debug
+          load: true
+
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: kaniko-builder
+
+      - name: build image with kaniko
+        working-directory: kaniko-builder
+        run: |
+          docker run \
+            --rm \
+            -v "$(pwd)":/workspace \
+            -v "$HOME/.docker/config.json":/kaniko/.docker/config.json \
+            ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug \
+            --build-arg CI_COMMIT_SHA=${{ github.sha }} \
+            --dockerfile /workspace/test/Dockerfile \
+            --context dir:///workspace/test \
+            --destination ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko-app:${{ github.sha }} \
+            --cache=true \
+            --cache-ttl=720h \
+            --cache-copy-layers=true \
+            --registry-mirror=dockerhub.vshn.net \
+            --compressed-caching=false \
+            --cache-repo ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko-app-cache \
+            --single-snapshot \
+            --reproducible
+
+      - name: test built image
+        working-directory: kaniko-builder
+        run: |
+          IMAGE=ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko-app:${{ github.sha }}
+          docker pull $IMAGE
+
+          docker run --rm -d --name app -p 8080:8080 $IMAGE
+
+          for i in $(seq 1 10); do
+            health_status=$(docker inspect --format='{{json .State.Health.Status}}' app 2>/dev/null || echo "not_running")
+            if [ "$health_status" = "\"healthy\"" ]; then
+              echo "container is healthy"
+              break
+            fi
+            echo "waiting for container to become healthy... ($i/10)"
+            sleep 1
+          done
+          
+          docker logs app
+
+          curl -v http://localhost:8080/ || true
+
+          health_status=$(docker inspect --format='{{json .State.Health.Status}}' app 2>/dev/null || echo "not_running")
+          if [ "$health_status" != "\"healthy\"" ]; then
+            echo "container did not become healthy within 10 seconds (status: $health_status)"
+            exit 1
+          fi
+
+          APP_RESPONSE=$(curl -s "http://localhost:8080/")
+
+          if echo "$APP_RESPONSE" | grep -q "${{ github.sha }}"; then
+            echo "SUCCESS: Commit SHA (${{ github.sha }}) found in application response."
+          else
+            echo "Commit SHA not found in response."
+            echo $APP_RESPONSE
+            exit 1
+          fi
+
+      - name: stop container
+        if: always()
+        run: |
+          docker stop app || true
+
+      - name: push image
+        if: ${{ env.PUSH }}
+        run: docker push ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug
