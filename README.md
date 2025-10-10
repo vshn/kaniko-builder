@@ -17,6 +17,7 @@ Following a similar grace period, the `debug-nightly` tag is re-tagged as
 `debug` (see [`push-stable.yaml`](.github/workflows/push-stable.yaml)). The
 `debug` tag is subsequently used for VSHN's [AppFlow](https://www.vshn.ch/en/solutions/appflow/)
 customers and other products.
+The auto merge to push the stable tag after a grace period is disabled for now.
 
 ### Stopping the Rollout
 

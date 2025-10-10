@@ -12,10 +12,6 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["ghcr.io/vshn/kaniko"],
-      "automerge": true
-    },
-    {
       "matchFileNames": ["test/**"],
       "schedule": ["on the 5th day of the month"],
       "groupName": "test"
