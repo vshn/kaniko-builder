@@ -118,5 +118,5 @@ jobs:
           docker stop app || true
 
       - name: push image
-        if: ${{ env.PUSH }}
+        if: ${{ env.PUSH == 'true' }}
         run: docker push ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug
