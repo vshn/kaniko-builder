@@ -2,6 +2,7 @@
 
 This repository builds a custom Kaniko Docker image. It currently utilizes a
 fork from Chainguard: [chainguard-dev/kaniko](https://github.com/chainguard-dev/kaniko).
+It also adds kubectl to the image.
 
 ## Updates
 

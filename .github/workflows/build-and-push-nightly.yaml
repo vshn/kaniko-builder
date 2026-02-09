@@ -38,23 +38,24 @@ jobs:
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
 
       - uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
-        id: build
+        id: build-base
         with:
           context: .
           file: ./deploy/Dockerfile
           push: false
-          tags: ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug
+          tags: ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko-base:nightly-debug
           cache-from: type=gha
           cache-to: type=gha,mode=max
           target: kaniko-debug
           load: true
 
+      - run: find . -mindepth 1 -delete
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          path: kaniko-builder
+
+      - run: docker build . -t ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko:nightly-debug --build-arg IMAGE_PROJECT=${{ env.IMAGE_PROJECT }}
 
       - name: build image with kaniko
-        working-directory: kaniko-builder
         run: |
           docker run \
             --rm \
@@ -75,7 +76,6 @@ jobs:
             --reproducible
 
       - name: test built image
-        working-directory: kaniko-builder
         run: |
           IMAGE=ghcr.io/${{ env.IMAGE_PROJECT }}/kaniko-app:${{ github.sha }}
           docker pull $IMAGE
