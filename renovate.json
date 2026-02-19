@@ -3,6 +3,19 @@
   "rebaseWhen": "conflicted",
   "minimumReleaseAge": "14 days",
   "labels": ["renovate"],
+  "ignorePresets": [
+    ":ignoreModulesAndTests"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/__fixtures__/**"
+  ],
   "vulnerabilityAlerts": {
     "automerge": false
   },
