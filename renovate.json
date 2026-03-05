@@ -1,8 +1,12 @@
 {
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "rebaseWhen": "conflicted",
   "minimumReleaseAge": "14 days",
-  "labels": ["renovate"],
+  "labels": [
+    "renovate"
+  ],
   "ignorePresets": [
     ":ignoreModulesAndTests"
   ],
@@ -14,24 +18,35 @@
   },
   "packageRules": [
     {
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "automerge": true
     },
     {
-      "matchFileNames": ["test/**"],
-      "schedule": ["on the 5th day of the month"],
+      "matchFileNames": [
+        "test/**"
+      ],
+      "schedule": [
+        "on the 5th day of the month"
+      ],
       "groupName": "test"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/.github/.*\\.yaml$/"],
+      "managerFilePatterns": [
+        "/.github/.*\\.yaml$/"
+      ],
       "matchStrings": [
         "renovate: datasource=(?<datasource>.*?) packageName=(?<packageName>.*?)( versioning=(?<versioning>.*?))?\\s.*?ref: (?<currentValue>.*)",
         "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*TAG=\"(?<currentValue>.*)@(?<currentDigest>[^\"]*?)\""
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
-  ]
+  ],
+  "registryAliases": {
+    "dockerhub.vshn.net": "docker.io"
+  }
 }
