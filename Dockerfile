@@ -1,7 +1,7 @@
 ARG IMAGE_PROJECT=vshn
 ARG VERSION=nightly-debug
 
-FROM alpine:3.23.4 AS builder
+FROM alpine:3.24.1 AS builder
 
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
 ENV KUBECTL_VERSION=v1.35.0
