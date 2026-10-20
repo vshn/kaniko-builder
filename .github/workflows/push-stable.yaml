@@ -20,7 +20,7 @@ env:
 jobs:
   # the latest of the flavor debug is called debug
   retag-nightly-to-latest:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
