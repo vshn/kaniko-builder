@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.28
 
-FROM node:24-alpine AS prod-deps
+FROM node:26-alpine AS prod-deps
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY src/app.ts ./app.ts
 
-FROM node:24-alpine AS firstStage
+FROM node:26-alpine AS firstStage
 
 ARG CI_COMMIT_SHA
 
